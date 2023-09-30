@@ -1,13 +1,13 @@
 <script>
 
-import { siNoe } from '$lib/hentInfo'
+import { chatResponse } from '$lib/hentInfo'
 
     let melding = "tom akkurat nå"
     let bspm = ""
 
     function beOmSvar(spm) {
         console.log("Kjører");
-        melding = siNoe();
+        melding = chatResponse(spm);
     }
 </script>
 
@@ -20,7 +20,14 @@ import { siNoe } from '$lib/hentInfo'
     <button on:click={beOmSvar(bspm)}>Send</button>
     <div>
         <p>Her kommer svaret: 
-            {melding}
+            {#await melding}
+                <p>venter på svar</p>
+            {:then m}
+                <p>{m}</p>
+            {:catch error}
+                <p>Det skjedde en feil: {error.message}</p>
+            {/await}
+        </p>
     </div>
 </div>
 

@@ -1,23 +1,26 @@
-import { OpenAI } from "langchain/llms/openai";
+// import { OpenAI } from "langchain/llms/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 
 // Document loader and text splitter and vector store
-import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
+// import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { RetrievalQAChain } from "langchain/chains";
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
+import { EPubLoader } from "langchain/document_loaders/fs/epub";
+
 
 const OPENAI_API_KEY=import.meta.env.VITE_OPENAI_API_KEY;
 
-const loader = new CheerioWebBaseLoader("https://no.wikipedia.org/wiki/Vestfold_og_Telemark");
-// const loader = new PDFLoader("$lib/docs/rpba.pdf")
+// const loader = new CheerioWebBaseLoader("https://lilianweng.github.io/posts/2023-06-23-agent/");
+// const loader = new PDFLoader("src/lib/docs/orden.pdf")
+const loader = new EPubLoader("src/lib/docs/budsjett2022.epub");
 const data = await loader.load();
 
 const textSplitter = new RecursiveCharacterTextSplitter({
-  chunkSize: 500,
-  chunkOverlap: 0,
+chunkSize: 1000,
+chunkOverlap: 200,
 });
 
 const splitDocs = await textSplitter.splitDocuments(data);
@@ -31,10 +34,15 @@ const model = new ChatOpenAI({ openAIApiKey: OPENAI_API_KEY, modelName: "gpt-3.5
 const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
 
 const response = await chain.call({
-  query: "Når ble Vestfold fylke opprettet?",
-});
-console.log(response);
+    query: "Hva den totale inntekten?",
+    });
+    console.log(response);
 
-export const siNoe = async () => {
-    return "Hey hey hey!" // chatCompletion.data.choices[0].text;
+export const chatResponse = async (question) => {
+    const response = await chain.call({
+    query: question,
+    });
+    console.log(question);
+    console.log(response);
+    return response;
 }
