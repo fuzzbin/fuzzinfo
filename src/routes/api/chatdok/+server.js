@@ -22,12 +22,12 @@ const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
 
 export const POST = async  ({ request }) => {
     const body = await request.json();
-    console.log("Jepp: " + body.query);
+    console.log("Spørsmål: " + body.query);
 
     const response = await chain.call({
         query: body.query,
         });
-    console.log(body.query, response.text);
+    console.log("Svar: " + response.text);
 
     return new Response(JSON.stringify({ message: response.text }))
 }
