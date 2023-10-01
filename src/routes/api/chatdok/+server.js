@@ -6,7 +6,7 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { RetrievalQAChain } from "langchain/chains";
 
 const OPENAI_API_KEY=import.meta.env.VITE_OPENAI_API_KEY;
-const loader = new PDFLoader("src/lib/docs/orden.pdf")
+const loader = new PDFLoader("src/lib/docs/budsjett2022.pdf")
 
 const data = await loader.load();
 const textSplitter = new RecursiveCharacterTextSplitter({
@@ -20,12 +20,14 @@ const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings)
 const model = new ChatOpenAI({ openAIApiKey: OPENAI_API_KEY, modelName: "gpt-3.5-turbo" });
 const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
 
-export const GET = async  ({ request }) => {
+export const POST = async  ({ request }) => {
+    const body = await request.json();
+    console.log("Jepp: " + body.query);
 
     const response = await chain.call({
-        query: "Kan jeg bruke snus?",
+        query: body.query,
         });
-    console.log(response);
+    console.log(body.query, response.text);
+
     return new Response(JSON.stringify({ message: response.text }))
 }
-
