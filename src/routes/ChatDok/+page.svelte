@@ -1,5 +1,5 @@
 <script>
-    let melding = "Hei hei"
+    let melding = "Her kommer svaret etterhvert....."
     let spm = "";
 
     const beOmSvar = async (spm) => {
@@ -7,17 +7,17 @@
         const data = { query: spm};
 
         melding = await fetch('/api/chatdok', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'no-cors', // no-cors, *cors, same-origin
+            method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data) // body data type must match "Content-Type" header
+            body: JSON.stringify(data)
         })
             .then(res => res.json())
             .then(res => res.message)   
         console.log("Svar:" + melding);
-        return melding; // parses JSON response into native JavaScript objects
+        return melding;
     }
 
 
@@ -26,17 +26,17 @@
         const data = { query: spm};
 
         melding = await fetch('/api/chromachat', {
-            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'no-cors', // no-cors, *cors, same-origin
+            method: 'POST',
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data) // body data type must match "Content-Type" header
+            body: JSON.stringify(data) 
         })
             .then(res => res.json())
             .then(res => res.message)   
         console.log("Svar:" + melding);
-        return melding; // parses JSON response into native JavaScript objects
+        return melding;
     }
 
 </script>
@@ -46,7 +46,8 @@
 <p>Du kan stille spørsmål til statsbudsjettet i feltet under. Prøv å stille så presise spørsmål som mulig for best mulig resultat.</p>
 
 <div>
-    <input bind:value={spm} placeholder="Spørsmål til statsbudsjette" type="text">
+    <input bind:value={spm} placeholder="Spørsmål til statsbudsjettet" type="text" style="width: 20rem; margin-bottom: 20px;">
+    <br>
     <button on:click={beOmSvar(spm)}>Spør dokumentet</button>
     <button on:click={beOmSvarChroma(spm)}>Spør Chroma</button>
     <div>

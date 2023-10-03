@@ -5,7 +5,8 @@ import { FaissStore } from "langchain/vectorstores/faiss";
 import { RetrievalQAChain } from "langchain/chains";
 
 const OPENAI_API_KEY=import.meta.env.VITE_OPENAI_API_KEY;
-const loader = new PDFLoader("src/lib/docs/orden.pdf")
+
+const loader = new PDFLoader("src/lib/docs/budsjett2022.pdf")
 const docs = await loader.load();
 
 // Sett inn FAISS her
