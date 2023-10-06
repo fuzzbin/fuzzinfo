@@ -1,16 +1,8 @@
 
 
 <script>
-   import { msal } from '$lib/msal.js'
+   import { authProvider } from '$lib/auth/authProvider';
 
-   msal.loginPopup()
-   .then(response => {
-      console.log('Login success:', response);
-   navigate('/dashboard'); // replace with your app's dashboard URL
-  })
-  .catch(error => {
-    console.error('Login error:', error);
-  });
 
 
 </script>
