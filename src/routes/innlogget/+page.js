@@ -1,17 +1,20 @@
-const { PublicClientApplication } = require('@azure/msal-node');
+import { msal } from '@azure/msal-browser'
+import { env } from '$env/dynamic/public';
+
 const config = {
-  auth: {
-    clientId: 'b88bd17e-a780-4dc9-841f-2295f6abde19',
-    authority: 'https://login.microsoftonline.com/organizations',
-    redirectUri: 'http://localhost:5173/innlogget',
-  }
+      auth: {
+        clientId: '$env.CLIENT_ID',
+        authority: 'https://login.microsoftonline.com/organizations',
+        redirectUri: 'http://localhost:5173/innlogget',
+      }
 }
-const msalInstance = new PublicClientApplication(config);
+
+const msalInstance = new msal.PublicClientApplication(config);
+
 const loginRequest = {
-  scopes: [ "user.read" ]
+    scopes: [ "user.read" ]
 };
 
-
-let loginResponse = await msalInstance.acquireTokenByDeviceCode(loginRequest);
-console.log(loginResponse);
+let loginResponse = await msalInstance.loginPopup(loginRequest);
+console.log(loginResponse)
 
