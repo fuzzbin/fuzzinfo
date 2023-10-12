@@ -1,4 +1,7 @@
 import { PublicClientApplication } from '@azure/msal-browser'
+import { api, authConfig } from '../../../config'
+import { msalClientStore } from '$lib/store.js' 
+import { get } from 'svelte/store'
 
 const popupLogin = async (forceLogin = false) => {
     const msalClient = get(msalClientStore) || new PublicClientApplication(authConfig)

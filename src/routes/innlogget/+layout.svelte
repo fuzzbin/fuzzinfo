@@ -1,29 +1,26 @@
 
 
 <script>
-    import login from '$lib/Auth/login';
-    import { get } from 'svelte/store';
+import { PublicClientApplication } from "@azure/msal-browser";
 
-    let msal
-    let user
 
-    console.log('Hello???')
-
-    const loginHandler = async () => {
-        if(!get(userStore)) {
-            const user = await login()
-            userStore.set(user)
-        } else {
-            {}
-        }
+const msalConfig = {
+    auth: {
+        clientId: 'xxxx',
+        authority: 'https://login.microsoftonline.com/{xxx}'
     }
+};
 
-loginHandler();
+async function login() {
+  const msalInstance = new PublicClientApplication(msalConfig);
+  await msalInstance.initialize();    
+  msalInstance.loginPopup({
+      redirectUri: "http://localhost:3000/blank.html"
+  });
+}
 
+login()
 </script>
 
-
-
-Meny++++
-
 <slot />
+
